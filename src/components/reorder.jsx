@@ -9,16 +9,16 @@ export const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-export const reorderColors = (colors, source, destination) => {
-  const current = [...colors[source.droppableId]];
-  const next = [...colors[destination.droppableId]];
+export const reorderIcons = (icons, source, destination) => {
+  const current = [...icons[source.droppableId]];
+  const next = [...icons[destination.droppableId]];
   const target = current[source.index];
 
   // moving to same list
   if (source.droppableId === destination.droppableId) {
     const reordered = reorder(current, source.index, destination.index);
     return {
-      ...colors,
+      ...icons,
       [source.droppableId]: reordered
     };
   }
@@ -31,7 +31,7 @@ export const reorderColors = (colors, source, destination) => {
   next.splice(destination.index, 0, target);
 
   return {
-    ...colors,
+    ...icons,
     [source.droppableId]: current,
     [destination.droppableId]: next
   };

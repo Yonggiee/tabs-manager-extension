@@ -5,18 +5,22 @@ import Grid from "@material-ui/core/Grid";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import DragAndDrop from "./drag-n-drop";
+import { reorderIcons } from "./reorder";
 
-const defs = (
-  <Card>
-    <h2>default</h2>
-  </Card>
-);
+// const defs = (
+//   <Card>
+//     <h2>default</h2>
+//   </Card>
+// );
 
 class Main extends Component {
   state = {
+    uncategorised: [],
     tabs: [],
-    cards: [defs]
+    array: { "0": { category: "Uncategorised", icons: [] } }
+    // cards: [defs]
   };
+
   // favIconUrl
   // url
 
@@ -30,24 +34,47 @@ class Main extends Component {
     }
 
     await getTabs().then(tabs => {
-      this.setState({ tabs });
+      const array = { ...this.state.array };
+      array["0"].icons = tabs;
+      this.setState({ tabs, loaded: true, array });
     });
   }
 
-  onAddCard = () => {
-    const cards = this.state.cards;
-    cards.push(
-      <Card>
-        <h2>lala</h2>
-      </Card>
-    );
-    this.setState({ cards });
-    console.log(this.state.cards);
+  // onAddCard = () => {
+  //   const cards = this.state.cards;
+  //   cards.push(
+  //     <Card>
+  //       <h2>lala</h2>
+  //     </Card>
+  //   );
+  //   this.setState({ cards });
+  //   console.log(this.state.cards);
+  // };
+
+  setIconMap = (tabs, destination, source) => {
+    this.setState({ array: reorderIcons(tabs, source, destination) });
+  };
+
+  addCategory = (category, icons) => {
+    console.log("hello");
+    const array = { ...this.state.array };
+    const len = Object.entries(array).length;
+
+    array[Object.entries(array).length] = {
+      category: len,
+      icons: [
+        {
+          // id: "1293921873912638"
+          // favIconUrl: "https://github.githubassets.com/favicon.ico"
+        }
+      ]
+    };
+    this.setState({ array });
   };
 
   render() {
-    const { tabs, cards } = this.state;
-    const { favIconUrl, url } = tabs;
+    const { tabs, array } = this.state;
+    console.log(tabs);
 
     return (
       <Grid
@@ -57,7 +84,12 @@ class Main extends Component {
       >
         <Grid item xs={12} style={{ padding: "2%", backgroundColor: "orange" }}>
           <Card style={{ width: "600px" }}>
-            {tabs.length > 0 && <DragAndDrop tabs={tabs}></DragAndDrop>}
+            {tabs.length > 0 && (
+              <DragAndDrop
+                tabs={array}
+                setIconMap={this.setIconMap}
+              ></DragAndDrop>
+            )}
           </Card>
           {/* <div>
             {cards.map(card => (
@@ -68,7 +100,7 @@ class Main extends Component {
         <Grid item xs={12}>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Fab color="primary" aria-label="add">
-              <AddIcon onClick={this.onAddCard} />
+              <AddIcon onClick={this.addCategory} />
             </Fab>
           </div>
         </Grid>

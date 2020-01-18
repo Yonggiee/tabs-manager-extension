@@ -1,13 +1,23 @@
+/*global chrome*/
 import React from "react";
 import { Droppable, Draggable, DroppableProvided } from "react-beautiful-dnd";
 import TextField from "@material-ui/core/TextField";
 
 export const AuthorList = ({ listId, listType, tabs }) => {
-  console.log("author");
+  function switchTab(tabid) {
+    // find the tab
+    chrome.tabs.get(tabid, function(tab) {
+      // Focus the window before the tab to fix issue #273
+      //chrome.windows.update(tab.windowId, { focused: true }, function () {
+      // focus the tab
+      chrome.tabs.update(tabid, { active: true }, function(tab) {});
+      //});
+    });
+  }
 
   return (
     <React.Fragment>
-      <TextField id="standard-basic" fullWidth />
+      <TextField id="standard-basic" fullWidth value={listId}></TextField>
       <Droppable
         droppableId={listId}
         type={listType}
@@ -19,10 +29,10 @@ export const AuthorList = ({ listId, listType, tabs }) => {
             <div>
               <div>
                 <div style={{ display: "flex" }} ref={dropProvided.innerRef}>
-                  {tabs.map((tab, index) => (
+                  {tabs.icons.map((tab, index) => (
                     <Draggable
-                      key={`${tab.id}${tab.index}`}
-                      draggableId={`${tab.id}${tab.index}`}
+                      key={`${tab.id}`}
+                      draggableId={`${tab.id}`}
                       index={index}
                     >
                       {dragProvided => (
@@ -34,6 +44,7 @@ export const AuthorList = ({ listId, listType, tabs }) => {
                           <img
                             src={tab.favIconUrl}
                             style={{ height: "40px" }}
+                            onClick={() => switchTab(tab.id)}
                           ></img>
                         </div>
                       )}
