@@ -5,23 +5,30 @@ import Grid from "@material-ui/core/Grid";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import TextField from "@material-ui/core/TextField";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import DragAndDrop from "./drag-n-drop";
 
 class Main extends Component {
   state = {
     tabs: []
   };
 
-  printChromeTabs = () => {
+  // favIconUrl
+  // url
+  componentDidMount() {
     let tabOpened = [];
     chrome.tabs.query({}, function(tabs) {
       tabOpened = tabs;
       console.log(tabs);
     });
-    this.setState(tabOpened);
-  };
+    this.setState({ tabs: tabOpened });
+  }
+
+  printChromeTabs = () => {};
 
   render() {
+    const { tabs } = this.state;
+    const { favIconUrl, url } = tabs;
+
     return (
       <Grid
         container
@@ -31,12 +38,14 @@ class Main extends Component {
         <Grid item xs={12} style={{ padding: "2%", backgroundColor: "orange" }}>
           <Card>
             <TextField id="standard-basic" fullWidth />
-            <Card>
-              <img src="./logo192.png"></img>
-              <img src="./logo192.png"></img>
-              <img src="./logo192.png"></img>
-              <img src="./logo192.png"></img>
-            </Card>
+            <DragAndDrop tabs={tabs}></DragAndDrop>
+            {/* {tabs.map(tab => {
+              return (
+                <Card>
+                  <img src={favIconUrl}></img>
+                </Card>
+              );
+            })} */}
           </Card>
         </Grid>
         <Grid item xs={12}>
