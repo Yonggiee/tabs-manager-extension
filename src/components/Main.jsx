@@ -6,9 +6,16 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import DragAndDrop from "./drag-n-drop";
 
+const defs = (
+  <Card>
+    <h2>default</h2>
+  </Card>
+);
+
 class Main extends Component {
   state = {
-    tabs: []
+    tabs: [],
+    cards: [defs]
   };
   // favIconUrl
   // url
@@ -27,8 +34,20 @@ class Main extends Component {
     });
   }
 
+  onAddCard = () => {
+    const cards = this.state.cards;
+    cards.push(
+      <Card>
+        <h2>lala</h2>
+      </Card>
+    );
+    this.setState({ cards });
+    console.log(this.state.cards);
+  };
+
   render() {
-    const { tabs } = this.state;
+    const { tabs, cards } = this.state;
+    const { favIconUrl, url } = tabs;
 
     return (
       <Grid
@@ -40,11 +59,16 @@ class Main extends Component {
           <Card style={{ width: "600px" }}>
             {tabs.length > 0 && <DragAndDrop tabs={tabs}></DragAndDrop>}
           </Card>
+          {/* <div>
+            {cards.map(card => (
+              <div> {card} </div>
+            ))}
+          </div> */}
         </Grid>
         <Grid item xs={12}>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Fab color="primary" aria-label="add">
-              <AddIcon />
+              <AddIcon onClick={this.onAddCard} />
             </Fab>
           </div>
         </Grid>
