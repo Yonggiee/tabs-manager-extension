@@ -5,7 +5,8 @@ import { AuthorList } from "./authorList";
 
 const DragAndDrop = ({ tabs }) => {
   const [iconMap, setIconMap] = React.useState({
-    default: tabs
+    tab: tabs.slice(0, 5),
+    tabb: tabs.slice(6, 8)
   });
 
   return (
