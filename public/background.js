@@ -71,7 +71,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
         for (let j = 0; j < iconsArray.length; j++) {
           if (iconsArray[j].id == tabId) {
             let temp = changeInfo.favIconUrl;
-           // alert(temp);
+            // alert(temp);
             if (temp != undefined) {
               iconsArray[j].favIconUrl = temp;
               break;
@@ -83,7 +83,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       chrome.cookies.set(
         { url: "https://*/", name: "store", value: ss },
         function(cookie2) {
-        //  alert(cookie2.value);
+          //  alert(cookie2.value);
         }
       );
     });
