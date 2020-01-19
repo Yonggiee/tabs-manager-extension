@@ -2,8 +2,6 @@
 import React, { Component } from "react";
 import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
 import DragAndDrop from "./drag-n-drop";
 import { reorderIcons } from "./reorder";
 
@@ -41,11 +39,11 @@ class Main extends Component {
 
     await getTabs().then(tabs => {
       const array = { ...this.state.array };
-      array[0] = tabs.slice(1, 3);
-      array[1] = tabs.slice(4, 5);
-      array[2] = tabs.slice(6, 8);
-      array[3] = tabs.slice(9, 10);
-      array[4] = tabs.slice(12, 15);
+      array[0] = [];
+      array[1] = [];
+      array[2] = [];
+      array[3] = [];
+      array[4] = tabs;
       this.setState({ tabs, loaded: true, array });
     });
   }

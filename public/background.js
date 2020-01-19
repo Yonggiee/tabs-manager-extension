@@ -1,9 +1,4 @@
 /*global chrome*/
-// chrome.tabs.query({ currentWindow: true, active: true }, function(tabs) {
-//   console.log(tabs[0]);
-// });
-
-//alert(window);
 let arr = [
   {
     category: "0",
@@ -105,3 +100,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     });
   }
 });
+
+function getCookie() {
+  chrome.cookies.get({ url: "https://*/", name: "store" }, function(cookie) {
+    return JSON.parse(cookie.value);
+  });
+}
