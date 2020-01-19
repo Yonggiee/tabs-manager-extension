@@ -6,6 +6,7 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import TextField from "@material-ui/core/TextField";
 import DragAndDrop from "./drag-n-drop";
+import Cookies from "js-cookie";
 
 const defs = (
   <Card>
@@ -22,11 +23,22 @@ class Main extends Component {
   // favIconUrl
   // url
   componentDidMount() {
+    // console.log(chrome.storage.local.get(['cards'], function(result) {
+     
+    // }));
+    // let reloadCards = chrome.storage.local.get(['cards'], function(result) {
+    //   console.log("get");
+    // });
+
     let tabOpened = [];
     chrome.tabs.query({}, function(tabs) {
       tabOpened = tabs;
       console.log(tabs);
     });
+
+    // if (reloadCards != null){
+    //   this.setState({ tabs: tabOpened, cards: reloadCards });
+    // }
 
     this.setState({ tabs: tabOpened });
   }
@@ -39,8 +51,12 @@ class Main extends Component {
       </Card>
     );
 
-    this.setState({cards})
-
+    this.setState({cards});
+    // chrome.storage.local.set({ 'cards': cards }, function() {
+    //   console.log("set card");
+    // });
+    // console.log(chrome.storage.local.get(['cards'], function(result) {
+    // }));
     console.log(this.state.cards);
   };
 
