@@ -23,12 +23,16 @@ export const AuthorList = ({ listId, listType, tabs }) => {
         type={listType}
         direction="horizontal"
         isCombineEnabled={false}
+        style={{ height: "50px" }}
       >
         {dropProvided => (
           <div {...dropProvided.droppableProps}>
             <div>
               <div>
-                <div style={{ display: "flex" }} ref={dropProvided.innerRef}>
+                <div
+                  style={{ display: "flex", height: "50px" }}
+                  ref={dropProvided.innerRef}
+                >
                   {tabs.map((tab, index) => (
                     <Draggable
                       key={`${tab.id}`}
