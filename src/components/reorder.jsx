@@ -9,17 +9,28 @@ export const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-export const reorderColors = (colors, source, destination) => {
-  const current = [...colors[source.droppableId]];
-  const next = [...colors[destination.droppableId]];
-  const target = current[source.index];
+export const reorderIcons = (temp, source, destination) => {
+  // console.log("temp", temp);
+  let icons = [];
+  let category = "";
+  let index = "";
+  Object.entries(temp).map(([k, v]) => {
+    icons[v.category] = v.icons;
+    category = v.category;
+    index = k;
+  });
 
+  const current = [...icons[source.droppableId]];
+  const next = [...icons[destination.droppableId]];
+  const target = current[source.index];
+  // console.log("sourceindex", index);
   // moving to same list
   if (source.droppableId === destination.droppableId) {
     const reordered = reorder(current, source.index, destination.index);
+    temp[index].icons = icons[category];
+    // console.log("final temp", temp);
     return {
-      ...colors,
-      [source.droppableId]: reordered
+      ...temp
     };
   }
 
@@ -31,8 +42,10 @@ export const reorderColors = (colors, source, destination) => {
   next.splice(destination.index, 0, target);
 
   return {
-    ...colors,
+    ...icons,
     [source.droppableId]: current,
-    [destination.droppableId]: next
+    [destination.droppableId]: next,
+    sourceIndex: source.index,
+    destinationIndex: destination.index
   };
 };

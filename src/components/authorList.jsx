@@ -1,40 +1,63 @@
+/*global chrome*/
 import React from "react";
 import { Droppable, Draggable, DroppableProvided } from "react-beautiful-dnd";
+import TextField from "@material-ui/core/TextField";
 
 export const AuthorList = ({ listId, listType, tabs }) => {
+  function switchTab(tabid) {
+    // find the tab
+    chrome.tabs.get(tabid, function(tab) {
+      // Focus the window before the tab to fix issue #273
+      //chrome.windows.update(tab.windowId, { focused: true }, function () {
+      // focus the tab
+      chrome.tabs.update(tabid, { active: true }, function(tab) {});
+      //});
+    });
+  }
+
   return (
-    <Droppable
-      droppableId={listId}
-      type={listType}
-      direction="horizontal"
-      isCombineEnabled={false}
-    >
-      {dropProvided => (
-        <div {...dropProvided.droppableProps}>
-          <div>
+    <React.Fragment>
+      <TextField id="standard-basic" fullWidth value={listId}></TextField>
+      <Droppable
+        droppableId={listId}
+        type={listType}
+        direction="horizontal"
+        isCombineEnabled={false}
+      >
+        {dropProvided => (
+          <div {...dropProvided.droppableProps}>
             <div>
-              <div style={{ display: "flex" }} ref={dropProvided.innerRef}>
-                {tabs.map((tab, index) => (
-                  <Draggable key={tab} draggableId={tab} index={index}>
-                    {dragProvided => (
-                      <div
-                        {...dragProvided.dragHandleProps}
-                        {...dragProvided.draggableProps}
-                        ref={dragProvided.innerRef}
-                      >
-                        <img src={tab.favIconUrl}></img>
-                        <p>{tab}</p>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {dropProvided.placeholder}
+              <div>
+                <div style={{ display: "flex" }} ref={dropProvided.innerRef}>
+                  {tabs.map((tab, index) => (
+                    <Draggable
+                      key={`${tab.id}`}
+                      draggableId={`${tab.id}`}
+                      index={index}
+                    >
+                      {dragProvided => (
+                        <div
+                          {...dragProvided.dragHandleProps}
+                          {...dragProvided.draggableProps}
+                          ref={dragProvided.innerRef}
+                        >
+                          <img
+                            src={tab.favIconUrl}
+                            style={{ height: "40px" }}
+                            onClick={() => switchTab(tab.id)}
+                          ></img>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {dropProvided.placeholder}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-    </Droppable>
+        )}
+      </Droppable>
+    </React.Fragment>
   );
 };
 

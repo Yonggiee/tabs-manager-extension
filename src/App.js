@@ -4,7 +4,6 @@ import "./App.css";
 import Main from "./components/main";
 
 class App extends Component {
-  componentDidMount() {}
   render() {
     return (
       <React.Fragment>
