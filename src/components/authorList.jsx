@@ -29,7 +29,7 @@ export const AuthorList = ({ listId, listType, tabs }) => {
             <div>
               <div>
                 <div style={{ display: "flex" }} ref={dropProvided.innerRef}>
-                  {tabs.icons.map((tab, index) => (
+                  {tabs.map((tab, index) => (
                     <Draggable
                       key={`${tab.id}`}
                       draggableId={`${tab.id}`}

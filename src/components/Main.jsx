@@ -17,7 +17,10 @@ class Main extends Component {
   state = {
     uncategorised: [],
     tabs: [],
-    array: { "0": { category: "Uncategorised", icons: [] } }
+    array: {
+      "0": { category: "Uncategorised", icons: [] },
+      "1": { category: "Once", icons: [] }
+    }
     // cards: [defs]
   };
 
@@ -35,7 +38,8 @@ class Main extends Component {
 
     await getTabs().then(tabs => {
       const array = { ...this.state.array };
-      array["0"].icons = tabs;
+      array[0].icons = tabs.slice(0, 4);
+      array[1].icons = tabs.slice(5, 8);
       this.setState({ tabs, loaded: true, array });
     });
   }
@@ -52,7 +56,16 @@ class Main extends Component {
   // };
 
   setIconMap = (tabs, destination, source) => {
-    this.setState({ array: reorderIcons(tabs, source, destination) });
+    console.log("Return from reorder icons!");
+    const response = reorderIcons(tabs, source, destination);
+    console.log(response);
+    // console.log("spreading");
+    const array = { ...this.state.array };
+    const x = Object.entries(response);
+    console.log(x);
+    array[0] = x[0][1];
+    console.log(array);
+    this.setState({ array });
   };
 
   addCategory = (category, icons) => {

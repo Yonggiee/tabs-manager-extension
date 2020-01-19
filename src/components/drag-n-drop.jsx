@@ -1,25 +1,16 @@
 import * as React from "react";
 import { DragDropContext } from "react-beautiful-dnd";
-import { reorderIcons } from "./reorder";
 import { AuthorList } from "./authorList";
 
 const DragAndDrop = ({ tabs, setIconMap }) => {
-  console.log("tabs");
-  console.log(tabs);
+  // console.log("tabs");
+  // console.log(tabs);
+  // console.log(tempTabs);
 
-  // const [iconMap, setIconMap] = React.useState(tabs);
-  // // const [iconMap, setIconMap] = React.useState({
-  // //   tab: tabs.slice(0, 5),
-  // //   tabb: tabs.slice(6, 8)
-  // // });
-
-  // console.log("iconmap");
-  // console.log(iconMap);
-
-  function addCategory(category, icons) {
-    const iconMap = { ...iconMap };
-    iconMap[category] = icons;
-  }
+  let tempTabs = [];
+  Object.entries(tabs).map(([k, v]) => {
+    tempTabs[v.category] = v.icons;
+  });
 
   return (
     <DragDropContext
@@ -28,11 +19,11 @@ const DragAndDrop = ({ tabs, setIconMap }) => {
         if (!destination) {
           return;
         }
-        setIconMap(reorderIcons(tabs, source, destination));
+        setIconMap(tabs, source, destination);
       }}
     >
       <div>
-        {Object.entries(tabs).map(([k, v]) => {
+        {Object.entries(tempTabs).map(([k, v]) => {
           return (
             <AuthorList
               internalScroll
