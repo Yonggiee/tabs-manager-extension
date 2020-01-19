@@ -18,8 +18,11 @@ class Main extends Component {
     uncategorised: [],
     tabs: [],
     array: {
-      "0": { category: "Uncategorised", icons: [] },
-      "1": { category: "Once", icons: [] }
+      "0": [],
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": []
     }
     // cards: [defs]
   };
@@ -38,8 +41,11 @@ class Main extends Component {
 
     await getTabs().then(tabs => {
       const array = { ...this.state.array };
-      array[0].icons = tabs.slice(0, 4);
-      array[1].icons = tabs.slice(5, 8);
+      array[0] = tabs.slice(1, 3);
+      array[1] = tabs.slice(4, 5);
+      array[2] = tabs.slice(6, 8);
+      array[3] = tabs.slice(9, 10);
+      array[4] = tabs.slice(12, 15);
       this.setState({ tabs, loaded: true, array });
     });
   }
@@ -55,21 +61,12 @@ class Main extends Component {
   //   console.log(this.state.cards);
   // };
 
-  setIconMap = (tabs, destination, source) => {
-    console.log("Return from reorder icons!");
+  setIconMap = (tabs, source, destination) => {
     const response = reorderIcons(tabs, source, destination);
-    console.log(response);
-    // console.log("spreading");
-    const array = { ...this.state.array };
-    const x = Object.entries(response);
-    console.log(x);
-    array[0] = x[0][1];
-    console.log(array);
-    this.setState({ array });
+    this.setState({ array: response });
   };
 
   addCategory = (category, icons) => {
-    console.log("hello");
     const array = { ...this.state.array };
     const len = Object.entries(array).length;
 
@@ -110,13 +107,13 @@ class Main extends Component {
             ))}
           </div> */}
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Fab color="primary" aria-label="add">
               <AddIcon onClick={this.addCategory} />
             </Fab>
           </div>
-        </Grid>
+        </Grid> */}
       </Grid>
     );
   }
