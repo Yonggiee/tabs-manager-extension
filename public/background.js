@@ -4,33 +4,18 @@
 // });
 
 //alert(window);
-let arr = [
-  {
-    category: "0",
-    icons: []
-  },
-  {
-    category: "1",
-    icons: []
-  },
-  {
-    category: "2",
-    icons: []
-  },
-  {
-    category: "3",
-    icons: []
-  },
-  {
-    category: "4",
-    icons: []
-  }
-];
+const arr = {
+      "0": [],
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": []
+    };
+
 let ss = JSON.stringify(arr);
 
 chrome.cookies.get({ url: "https://*/", name: "store" }, function(cookie) {
   if (cookie == undefined) {
-    //p alert("new");
     chrome.cookies.set(
       { url: "https://*/", name: "store", value: ss },
       function() {}
@@ -39,18 +24,15 @@ chrome.cookies.get({ url: "https://*/", name: "store" }, function(cookie) {
 });
 
 chrome.tabs.onRemoved.addListener(function(tabid, removed) {
-  //alert(arr[1].icons[0]);
   chrome.cookies.get({ url: "https://*/", name: "store" }, function(cookie) {
     const jsonFile = JSON.parse(cookie.value);
-    for (let i = 0; i < jsonFile.length; i++) {
-      let iconsArray = jsonFile[i].icons;
+    let iconsArray = Object.values(jsonFile);
       for (let j = 0; j < iconsArray.length; j++) {
         if (iconsArray[j].id == tabid) {
           iconsArray.splice(j, 1);
           break;
         }
       }
-    }
     const ss = JSON.stringify(jsonFile);
     chrome.cookies.set(
       { url: "https://*/", name: "store", value: ss },
@@ -64,7 +46,7 @@ chrome.tabs.onRemoved.addListener(function(tabid, removed) {
 chrome.tabs.onCreated.addListener(function(tab) {
   chrome.cookies.get({ url: "https://*/", name: "store" }, function(cookie) {
     const change = JSON.parse(cookie.value);
-    change[0].icons.push({
+    change["0"].push({
       id: tab.id,
       favIconUrl: "https://www.google.com/images/icons/product/chrome-32.png"
     });
@@ -72,7 +54,7 @@ chrome.tabs.onCreated.addListener(function(tab) {
     chrome.cookies.set(
       { url: "https://*/", name: "store", value: ss },
       function(cookie2) {
-        // alert(cookie2.value);
+         alert(cookie2.value);
       }
     );
   });
@@ -82,8 +64,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   if (changeInfo.url || changeInfo.favIconUrl) {
     chrome.cookies.get({ url: "https://*/", name: "store" }, function(cookie) {
       const jsonFile = JSON.parse(cookie.value);
-      for (let i = 0; i < jsonFile.length; i++) {
-        let iconsArray = jsonFile[i].icons;
+      let iconsArray = Object.values(jsonFile);
         for (let j = 0; j < iconsArray.length; j++) {
           if (iconsArray[j].id == tabId) {
             let temp = changeInfo.favIconUrl;
@@ -94,7 +75,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
             }
           }
         }
-      }
       const ss = JSON.stringify(jsonFile);
       chrome.cookies.set(
         { url: "https://*/", name: "store", value: ss },
