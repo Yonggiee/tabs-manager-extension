@@ -6,7 +6,23 @@
 //alert(window);
 let arr = [
   {
-    category: "uncategorised",
+    category: "0",
+    icons: []
+  },
+  {
+    category: "1",
+    icons: []
+  },
+  {
+    category: "2",
+    icons: []
+  },
+  {
+    category: "3",
+    icons: []
+  },
+  {
+    category: "4",
     icons: []
   }
 ];
@@ -48,7 +64,7 @@ chrome.tabs.onRemoved.addListener(function(tabid, removed) {
 chrome.tabs.onCreated.addListener(function(tab) {
   chrome.cookies.get({ url: "https://*/", name: "store" }, function(cookie) {
     const change = JSON.parse(cookie.value);
-    change[change.length - 1].icons.push({
+    change[0].icons.push({
       id: tab.id,
       favIconUrl: "https://www.google.com/images/icons/product/chrome-32.png"
     });
