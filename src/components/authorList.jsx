@@ -23,14 +23,19 @@ export const AuthorList = ({ listId, listType, tabs }) => {
         type={listType}
         direction="horizontal"
         isCombineEnabled={false}
-        style={{ height: "50px" }}
+        style={{ height: "40px" }}
       >
         {dropProvided => (
           <div {...dropProvided.droppableProps}>
             <div>
               <div>
                 <div
-                  style={{ display: "flex", height: "50px" }}
+                  style={{
+                    display: "flex",
+                    height: "40px",
+                    backgroundColor: "#efefef",
+                    paddingTop: "5px"
+                  }}
                   ref={dropProvided.innerRef}
                 >
                   {tabs.map((tab, index) => (
@@ -46,9 +51,15 @@ export const AuthorList = ({ listId, listType, tabs }) => {
                           ref={dragProvided.innerRef}
                         >
                           <img
-                            src={tab.favIconUrl}
-                            style={{ height: "40px" }}
+                            src={
+                              tab.favIconUrl !== ""
+                                ? tab.favIconUrl
+                                : "./template.png"
+                            }
+                            style={{ height: "30px", margin: "0 3px" }}
                             onClick={() => switchTab(tab.id)}
+                            alt={tab.title}
+                            title={tab.title}
                           ></img>
                         </div>
                       )}

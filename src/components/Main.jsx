@@ -4,6 +4,7 @@ import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
 import DragAndDrop from "./drag-n-drop";
 import { reorderIcons } from "./reorder";
+// import "../../public/background";
 
 // const defs = (
 //   <Card>
@@ -16,11 +17,11 @@ class Main extends Component {
     uncategorised: [],
     tabs: [],
     array: {
-      "0": [],
-      "1": [],
-      "2": [],
-      "3": [],
-      "4": []
+      Work: [],
+      Study: [],
+      Games: [],
+      Movies: [],
+      Uncategorised: []
     }
     // cards: [defs]
   };
@@ -39,11 +40,11 @@ class Main extends Component {
 
     await getTabs().then(tabs => {
       const array = { ...this.state.array };
-      array[0] = [];
-      array[1] = [];
-      array[2] = [];
-      array[3] = [];
-      array[4] = tabs;
+      array.Work = [];
+      array.Study = [];
+      array.Games = [];
+      array.Movies = [];
+      array.Uncategorised = tabs;
       this.setState({ tabs, loaded: true, array });
     });
   }
