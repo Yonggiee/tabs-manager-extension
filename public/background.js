@@ -1,89 +1,77 @@
 /*global chrome*/
 
-const arr = {
-  "0": [],
-  "1": [],
-  "2": [],
-  "3": [],
-  "4": []
-};
+// const arr = {
+//   Work: [],
+//   Study: [],
+//   Games: [],
+//   Movies: [],
+//   Uncategorised: []
+// };
 
-let ss = JSON.stringify(arr);
-
-chrome.cookies.get({ url: "https://*/", name: "store" }, function(cookie) {
-  if (cookie == undefined) {
-    chrome.cookies.set(
-      { url: "https://*/", name: "store", value: ss },
-      function() {}
-    );
-  }
-});
+// let ss = JSON.stringify(arr);
 
 chrome.tabs.onRemoved.addListener(function(tabid, removed) {
-  chrome.cookies.get({ url: "https://*/", name: "store" }, function(cookie) {
-    const jsonFile = JSON.parse(cookie.value);
-    let iconsArray = Object.values(jsonFile);
-    for (let j = 0; j < iconsArray.length; j++) {
-      if (iconsArray[j].id == tabid) {
-        iconsArray.splice(j, 1);
-        break;
+  chrome.storage.local.get('stored', function (result) {
+    const arr = JSON.parse(result.stored);
+    let arrKeys = Object.keys(arr);
+    let isBreak = false;
+    for (let x of arrKeys) {
+      let cate = arr[x];
+      if(!isBreak) {
+        for (let j = 0; j < cate.length; j++) {
+          if (cate[j].id == tabid) {
+            cate.splice(j, 1);
+            arr[x] = cate;
+            isBreak = true;
+            break;
+          }
+        }
       }
     }
-    const ss = JSON.stringify(jsonFile);
-    chrome.cookies.set(
-      { url: "https://*/", name: "store", value: ss },
-      function(cookie2) {
-        //alert(cookie2.value);
-      }
-    );
+    const ss = JSON.stringify(arr);
+    chrome.storage.local.set({'stored': ss }, function () {});
   });
 });
 
 chrome.tabs.onCreated.addListener(function(tab) {
-  chrome.cookies.get({ url: "https://*/", name: "store" }, function(cookie) {
-    const change = JSON.parse(cookie.value);
-    change["0"].push({
+  chrome.storage.local.get('stored', function (result) {
+    const change = JSON.parse(result.stored);
+    change.Uncategorised.push({
       id: tab.id,
       favIconUrl: "https://www.google.com/images/icons/product/chrome-32.png"
     });
     const ss = JSON.stringify(change);
-    chrome.cookies.set(
-      { url: "https://*/", name: "store", value: ss },
-      function(cookie2) {
-        alert(cookie2.value);
-      }
-    );
+    chrome.storage.local.set({ 'stored': ss }, function () { });
   });
 });
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   if (changeInfo.url || changeInfo.favIconUrl) {
-    chrome.cookies.get({ url: "https://*/", name: "store" }, function(cookie) {
-      const jsonFile = JSON.parse(cookie.value);
-      let iconsArray = Object.values(jsonFile);
-      for (let j = 0; j < iconsArray.length; j++) {
-        if (iconsArray[j].id == tabId) {
-          let temp = changeInfo.favIconUrl;
-          // alert(temp);
-          if (temp != undefined) {
-            iconsArray[j].favIconUrl = temp;
+    chrome.storage.local.get('stored', function (result) {
+      const arr = JSON.parse(result.stored);
+      let arrKeys = Object.keys(arr);
+      let isBreak = false;
+      for (let x of arrKeys) {
+      let cate = arr[x];
+      if(!isBreak) {
+        for (let j = 0; j < cate.length; j++) {
+          if (cate[j].id == tab.id) {
+            cate.splice(j, 1);
+            arr[x] = cate;
+            isBreak = true;
             break;
           }
         }
       }
-      const ss = JSON.stringify(jsonFile);
-      chrome.cookies.set(
-        { url: "https://*/", name: "store", value: ss },
-        function(cookie2) {
-          //  alert(cookie2.value);
-        }
-      );
+    }
+      arr.Uncategorised.push({
+        id: tab.id,
+        favIconUrl: tab.favIconUrl
+      });
+      const ss = JSON.stringify(arr);
+      chrome.storage.local.set({'stored': ss }, function () { });
     });
   }
 });
 
-function getCookie() {
-  chrome.cookies.get({ url: "https://*/", name: "store" }, function(cookie) {
-    return JSON.parse(cookie.value);
-  });
-}
+

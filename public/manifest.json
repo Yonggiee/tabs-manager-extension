@@ -9,6 +9,6 @@
     "scripts": ["background.js"],
     "persistent": false
   },
-  "permissions": ["tabs", "cookies", "https://*/", "*://*.google.com/"],
+  "permissions": ["tabs", "storage", "https://*/", "*://*.google.com/"],
   "content_security_policy": "script-src 'self' 'sha256-GgRxrVOKNdB4LrRsVPDSbzvfdV4UqglmviH9GoBJ5jk='; object-src 'self'"
 }

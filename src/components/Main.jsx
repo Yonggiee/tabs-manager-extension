@@ -40,15 +40,27 @@ class Main extends Component {
 
     await getTabs().then(tabs => {
       const array = { ...this.state.array };
-      array.Work = [];
-      array.Study = [];
-      array.Games = [];
-      array.Movies = [];
-      array.Uncategorised = tabs;
-      this.setState({ tabs, loaded: true, array });
+      chrome.storage.local.get('stored', (result) => {
+        if(result.stored != undefined){
+          const parsed = JSON.parse(result.stored);
+          array.Work = parsed.Work;
+          array.Study = parsed.Study;
+          array.Games = parsed.Games;
+          array.Movies = parsed.Movies;
+          array.Uncategorised = parsed.Uncategorised;
+          this.setState({ tabs, loaded: true, array });
+        } else {
+          array.Work = [];
+          array.Study = [];
+          array.Games = [];
+          array.Movies = [];
+          array.Uncategorised = tabs;
+          chrome.storage.local.set({ 'stored': JSON.stringify(array) }, function () { });
+          this.setState({ tabs, loaded:true, array });
+        }
+      });
     });
   }
-
   // onAddCard = () => {
   //   const cards = this.state.cards;
   //   cards.push(
@@ -63,6 +75,8 @@ class Main extends Component {
   setIconMap = (tabs, source, destination) => {
     const response = reorderIcons(tabs, source, destination);
     this.setState({ array: response });
+    let jsoned = JSON.stringify(response);
+    chrome.storage.local.set({'stored': jsoned }, function () { });
   };
 
   addCategory = (category, icons) => {
